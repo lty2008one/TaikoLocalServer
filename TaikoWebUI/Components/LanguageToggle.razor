@@ -16,7 +16,10 @@
     <MudText Typo="Typo.overline" Align="Align.Left" GutterBottom="true" Style="padding: 0 16px;font-weight: bold;">@Localizer["Song List"]</MudText>
     @foreach (var culture in supportedCultures)
     {
-    <MudMenuItem Class="lang-menu-item" IconSize="Size.Small" Icon="@cultureStatuses["SongName"][culture.Key]" OnClick="() => RequestSongNameCultureChange(culture.Key)" OnTouch="() => RequestSongNameCultureChange(culture.Key)">@culture.Value</MudMenuItem>
+        @if (culture.Key.Name != "fr-FR") //We do not add an entry for French song names as the game's wordlist has no fields for this.
+        {
+            <MudMenuItem Class="lang-menu-item" IconSize="Size.Small" Icon="@cultureStatuses["SongName"][culture.Key]" OnClick="() => RequestSongNameCultureChange(culture.Key)" OnTouch="() => RequestSongNameCultureChange(culture.Key)">@culture.Value</MudMenuItem>
+        }
     }
 </MudMenu>
 

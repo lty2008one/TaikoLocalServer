@@ -73,13 +73,15 @@ public class ChallengeCompeteService : IChallengeCompeteService
     {
         IQueryable<ChallengeCompeteDatum>? query = null;
         string? lowSearch = search != null ? search.ToLower() : null;
+        bool isAdmin = context.UserData.Where(u => u.Baid == baid).First().IsAdmin;
+
         if (mode == CompeteModeType.Chanllenge) 
         {
             query = context.ChallengeCompeteData
                 .Include(e => e.Songs).ThenInclude(e => e.BestScores).Include(e => e.Participants)
                 .Where(e => e.CompeteMode == CompeteModeType.Chanllenge)
                 .Where(e => inProgress == false || (e.CreateTime < DateTime.Now && DateTime.Now < e.ExpireTime))
-                .Where(e => baid == 0 || (e.Baid == baid || e.Participants.Any(p => p.Baid == baid)))
+                .Where(e => isAdmin || (e.Baid == baid || e.Participants.Any(p => p.Baid == baid)))
                 .Where(e => lowSearch == null || (e.CompId.ToString() == lowSearch || e.CompeteName.ToLower().Contains(lowSearch)));
         } 
         else if (mode == CompeteModeType.Compete)
@@ -88,7 +90,7 @@ public class ChallengeCompeteService : IChallengeCompeteService
                 .Include(e => e.Songs).ThenInclude(e => e.BestScores).Include(e => e.Participants)
                 .Where(e => e.CompeteMode == CompeteModeType.Compete)
                 .Where(e => inProgress == false || (e.CreateTime < DateTime.Now && DateTime.Now < e.ExpireTime))
-                .Where(e => baid == 0 || (e.Baid == baid || e.Participants.Any(p => p.Baid == baid) || e.Share == ShareType.EveryOne))
+                .Where(e => isAdmin || (e.Baid == baid || e.Participants.Any(p => p.Baid == baid) || e.Share == ShareType.EveryOne))
                 .Where(e => lowSearch == null || (e.CompId.ToString() == lowSearch || e.CompeteName.ToLower().Contains(lowSearch)));
         }
         else if (mode == CompeteModeType.OfficialCompete)
