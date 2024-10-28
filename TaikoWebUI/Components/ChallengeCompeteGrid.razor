@@ -33,7 +33,7 @@
                     {
                         <MudButton Variant="Variant.Filled" Size="Size.Large" StartIcon="@Icons.Material.Filled.Add" Color="Color.Tertiary" OnClick=@(_ => OpenDialogAsync(2, 3)) Style="width: 80px">@Localizer["Add"]</MudButton>
                     }
-                    else if (Mode == 3 && AuthService.IsAdmin)
+                    else if ((Mode == 3 && AuthService.IsAdmin) || !AuthService.LoginRequired)
                     {
                         <MudButton Variant="Variant.Filled" Size="Size.Large" StartIcon="@Icons.Material.Filled.Add" Color="Color.Tertiary" OnClick=@(_ => OpenDialogAsync(3, 5, 365, 100)) Style="width: 80px">@Localizer["Add"]</MudButton>
                     }

@@ -50,13 +50,11 @@ public partial class ChallengeCompeteGrid
             await AuthService.LoginWithAuthToken();
         }
 
-        if (AuthService.LoginRequired && AuthService.IsLoggedIn)
-        {
-            await GetChallengeCompetitionData();
-        }
+        await GetChallengeCompetitionData();
+        
 
         BreadcrumbsStateContainer.breadcrumbs.Clear();
-        BreadcrumbsStateContainer.breadcrumbs.Add(new BreadcrumbItem(Localizer["Challenge"], href: $"/ChallengeCompe/{Baid}/" + (Mode == 1 ? "Challenge" : Mode == 2 ? "Competition" : "OfficialCompetition")));
+        BreadcrumbsStateContainer.breadcrumbs.Add(new BreadcrumbItem((Mode == 1 ? Localizer["Challenge"] : Mode == 2 ? Localizer["Competition"] : Localizer["Official Competition"]), href: $"/ChallengeCompe/{Baid}/" + (Mode == 1 ? "Challenge" : Mode == 2 ? "Competition" : "OfficialCompetition")));
         BreadcrumbsStateContainer.NotifyStateChanged();
     }
 
