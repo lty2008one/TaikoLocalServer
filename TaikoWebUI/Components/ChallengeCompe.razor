@@ -63,7 +63,11 @@
         <MudCardActions>
             <MudStack Row="true" Style="width:100%" Spacing="4" Justify="Justify.FlexEnd">
                 <MudButton OnClick=@(_ => AnswerChallenge(true))>@Localizer["Information"]</MudButton>
-                @if (ChallengeCompetition.CompeteMode == CompeteModeType.Chanllenge)
+                @if (ChallengeCompetition.ExpireTime < DateTime.Now)
+                {
+                    <MudText Typo="Typo.body1" Style="padding: 6px 8px 6px 8px;" Color="Color.Warning">@Localizer["Finished"]</MudText>
+                }
+                else if (ChallengeCompetition.CompeteMode == CompeteModeType.Chanllenge)
                 {
                     @if (AuthService.IsAdmin || ChallengeCompetition?.Baid == Baid || ChallengeCompetition?.State != CompeteState.Waiting)
                     {

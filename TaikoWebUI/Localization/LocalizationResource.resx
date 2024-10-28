@@ -930,4 +930,7 @@
   <data name="Off" xml:space="preserve">
     <value />
   </data>
+  <data name="Finished" xml:space="preserve">
+    <value />
+  </data>
 </root>
