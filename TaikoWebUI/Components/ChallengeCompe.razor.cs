@@ -36,7 +36,7 @@ public partial class ChallengeCompe
 
     private bool ChallengeNeedAnswer()
     {
-        return Baid != 0 && ChallengeCompetition?.State == CompeteState.Waiting && ChallengeCompetition?.Baid != Baid;
+        return !AuthService.IsAdmin && ChallengeCompetition?.State == CompeteState.Waiting && ChallengeCompetition?.Baid != Baid;
     }
 
     private bool ParticipatedChallengeCompetition()

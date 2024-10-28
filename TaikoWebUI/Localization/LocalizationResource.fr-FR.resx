@@ -886,7 +886,7 @@
     <value>Limite atteinte</value>
   </data>
   <data name="Participated" xml:space="preserve">
-    <value>Déjà participé</value>
+    <value>Inscrit</value>
   </data>
   <data name="FullChallengeTitle" xml:space="preserve">
     <value>Défi de {From} à {To}</value>

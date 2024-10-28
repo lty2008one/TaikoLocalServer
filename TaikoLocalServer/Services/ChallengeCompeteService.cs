@@ -138,6 +138,8 @@ public class ChallengeCompeteService : IChallengeCompeteService
 
     public async Task CreateCompete(uint baid, ChallengeCompeteCreateInfo challengeCompeteInfo)
     {
+        bool isAdmin = context.UserData.Where(u => u.Baid == baid).First().IsAdmin;
+
         ChallengeCompeteDatum challengeCompeteData = new()
         {
             CompId = context.ChallengeCompeteData.Any() ? context.ChallengeCompeteData.AsEnumerable().Max(c => c.CompId) + 1 : 1,
@@ -169,8 +171,8 @@ public class ChallengeCompeteService : IChallengeCompeteService
             };
             await context.AddAsync(challengeCompeteSongData);
         }
-        if (baid != 0)
-        {
+
+        if (!isAdmin){ 
             ChallengeCompeteParticipantDatum participantDatum = new()
             {
                 CompId = challengeCompeteData.CompId,
@@ -179,7 +181,9 @@ public class ChallengeCompeteService : IChallengeCompeteService
             };
             await context.AddAsync(participantDatum);
         }
+
         await context.SaveChangesAsync();
+
     }
 
     public async Task<bool> ParticipateCompete(uint compId, uint baid)

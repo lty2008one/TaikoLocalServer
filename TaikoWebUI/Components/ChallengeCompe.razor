@@ -69,8 +69,11 @@
                 }
                 else if (ChallengeCompetition.CompeteMode == CompeteModeType.Chanllenge)
                 {
-                    @if (AuthService.IsAdmin || ChallengeCompetition?.Baid == Baid || ChallengeCompetition?.State != CompeteState.Waiting)
-                    {
+                    var targeted = true;
+                    if (ChallengeCompetition?.Participants.Find(u => u.Baid == Baid) == null) targeted = false; 
+                    //The above is used for admins only: If you are the target of a challenge, you should be able to accept or reject it
+                    if (ChallengeCompetition?.Baid == Baid || ChallengeCompetition?.State != CompeteState.Waiting || (!targeted && AuthService.IsAdmin))
+            {
                         switch (ChallengeCompetition?.State)
                         {
                             case CompeteState.Waiting:
@@ -87,16 +90,18 @@
                     else
                     {
                         <MudButtonGroup Color="Color.Primary" Variant="Variant.Filled" OverrideStyles="false">
-                            <MudButton Color="Color.Success" Variant="Variant.Filled" Disabled="@(AuthService.IsAdmin || (ChallengeCompetition?.State == CompeteState.Waiting && ChallengeCompetition?.Baid == Baid))"
+                            <MudButton Color="Color.Success" Variant="Variant.Filled" Disabled="@((AuthService.IsAdmin && !targeted)|| (ChallengeCompetition?.State == CompeteState.Waiting && ChallengeCompetition?.Baid == Baid))"
                                        OnClick=@(_ => AnswerChallenge(true))>@Localizer["Accept"]</MudButton>
-                            <MudButton Color="Color.Error" Variant="Variant.Filled" Disabled="@(AuthService.IsAdmin || (ChallengeCompetition?.State == CompeteState.Waiting && ChallengeCompetition?.Baid == Baid))"
+                            <MudButton Color="Color.Error" Variant="Variant.Filled" Disabled="@((AuthService.IsAdmin && !targeted) || (ChallengeCompetition?.State == CompeteState.Waiting && ChallengeCompetition?.Baid == Baid))"
                                        OnClick=@(_ => AnswerChallenge(false))>@Localizer["Reject"]</MudButton>
                         </MudButtonGroup>
+                        // The buttons are disabled on (AuthService.IsAdmin && !targeted) which means "You are admin and you're not a target of the challenge" 
+                        // This should never happen as you should instead see the buttons from the switch statement above !
                     }
                 }
                 else if (ChallengeCompetition.CompeteMode == CompeteModeType.Compete || ChallengeCompetition.CompeteMode == CompeteModeType.OfficialCompete)
                 {
-                    if (Baid != 0)
+                    if (!AuthService.IsAdmin)
                     {
                         if (ChallengeCompetition.Participants.Any(p => p.Baid == Baid))
                         {
